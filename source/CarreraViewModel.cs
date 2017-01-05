@@ -4,99 +4,104 @@ using System.IO.Ports;
 
 namespace Carrera
 {
-    class CarreraViewModel : PropertyChangedBase
+    class CarreraViewModel : PropertyChangedBase, IDisposable
     {
-        private SerialPort mySerialPort;
+        private SerialPort _serialPort;
 
-        int _lapCounter1 = 0;
-        int _lapCounter2 = 0;
+        private DriverModel _driverOne = new DriverModel("Lane left");
+        private DriverModel _driverTwo = new DriverModel("Lane right");
+
+
+        //int _lapCounter1 = 0;
+        //int _lapCounter2 = 0;
         DateTime _timeStamp1;
         DateTime _timeStamp2;
 
-        DateTime? _lastLapTime1;
-        DateTime? _lastLapTime2;
+        //DateTime? _lastLapTime1;
+        //DateTime? _lastLapTime2;
 
-        string _lastLapTimeString1;
-        string _lastLapTimeString2;
+        //string _lastLapTimeString1;
+        //string _lastLapTimeString2;
+        public DriverModel DriverOne { get { return _driverOne; } }
+        public DriverModel DriverTwo { get { return _driverTwo; } }
 
-        public int LapCounter1
-        {   get
-            {
-                return _lapCounter1;
-            }
-            private set
-            {
-                _lapCounter1 = value;
-                NotifyOfPropertyChange(() => LapCounter1);
-            }
-        }
-
-        public int LapCounter2
+        public CarreraViewModel()
         {
-            get
-            {
-                return _lapCounter2;
-            }
-            private set
-            {
-                _lapCounter2 = value;
-                NotifyOfPropertyChange(() => LapCounter2);
-            }
+            InitComPort(4);
         }
 
-        public string LastLapTimeString1
+        private void InitComPort(int port)
         {
-            get
-            {
-                return _lastLapTimeString1;
-            }
-            private set
-            {
-                _lastLapTimeString1 = value;
-                NotifyOfPropertyChange(() => LastLapTimeString1);
-            }
+            _serialPort = new SerialPort(string.Format("COM{0}", port));
+
+            _serialPort.BaudRate = 9600;
+            _serialPort.Parity = Parity.None;
+            _serialPort.StopBits = StopBits.One;
+            _serialPort.DataBits = 8;
+            _serialPort.Handshake = Handshake.None;
+            _serialPort.RtsEnable = false;
+
+            _serialPort.PinChanged += new SerialPinChangedEventHandler(PinChangedReveiveHandler);
+
+            _serialPort.Open();
         }
 
-        public string LastLapTimeString2
+        private void CloseComPort()
         {
-            get
-            {
-                return _lastLapTimeString2;
-            }
-            private set
-            {
-                _lastLapTimeString2 = value;
-                NotifyOfPropertyChange(() => LastLapTimeString2);
-            }
+            if (_serialPort != null)
+                _serialPort.Close();
         }
 
-        public void Start()
-        {
-            LapCounter1 = 0;
-            LapCounter2 = 0;
-            _timeStamp1 = DateTime.Now;
-            _timeStamp2 = DateTime.Now;
+        //public int LapCounter1
+        //{   get
+        //    {
+        //        return _lapCounter1;
+        //    }
+        //    private set
+        //    {
+        //        _lapCounter1 = value;
+        //        NotifyOfPropertyChange(() => LapCounter1);
+        //    }
+        //}
 
-            mySerialPort = new SerialPort("COM4");
+        //public int LapCounter2
+        //{
+        //    get
+        //    {
+        //        return _lapCounter2;
+        //    }
+        //    private set
+        //    {
+        //        _lapCounter2 = value;
+        //        NotifyOfPropertyChange(() => LapCounter2);
+        //    }
+        //}
 
-            mySerialPort.BaudRate = 9600;
-            mySerialPort.Parity = Parity.None;
-            mySerialPort.StopBits = StopBits.One;
-            mySerialPort.DataBits = 8;
-            mySerialPort.Handshake = Handshake.None;
-            mySerialPort.RtsEnable = false;
+        //public string LastLapTimeString1
+        //{
+        //    get
+        //    {
+        //        return _lastLapTimeString1;
+        //    }
+        //    private set
+        //    {
+        //        _lastLapTimeString1 = value;
+        //        NotifyOfPropertyChange(() => LastLapTimeString1);
+        //    }
+        //}
 
-            mySerialPort.PinChanged += new SerialPinChangedEventHandler(PinChangedReveiveHandler);
-
-            mySerialPort.Open();
-
-        }
-
-        public void Stop()
-        {
-            if (mySerialPort != null)
-                mySerialPort.Close();
-        }
+        //public string LastLapTimeString2
+        //{
+        //    get
+        //    {
+        //        return _lastLapTimeString2;
+        //    }
+        //    private set
+        //    {
+        //        _lastLapTimeString2 = value;
+        //        NotifyOfPropertyChange(() => LastLapTimeString2);
+        //    }
+        //}
 
         private void PinChangedReveiveHandler(
                     object sender,
@@ -108,35 +113,22 @@ namespace Carrera
                     if (_timeStamp1.AddSeconds(1) < DateTime.Now)
                     {
                         _timeStamp1 = DateTime.Now;
-                        if (!_lastLapTime1.HasValue)
-                        {
-                            _lastLapTime1 = DateTime.Now;
-                        }
-                        else
-                        {
-                            LapCounter1++;
-                            LastLapTimeString1 = DateTime.Now.Subtract(_lastLapTime1.Value).ToString("mm\\:ss\\.ff");
-                            _lastLapTime1 = DateTime.Now;
-                        }
+                        _driverOne.Update();
                     }
                     break;
                 case SerialPinChange.DsrChanged:
                     if (_timeStamp2.AddSeconds(1) < DateTime.Now)
                     {
                         _timeStamp2 = DateTime.Now;
-                        if (!_lastLapTime2.HasValue)
-                        {
-                            _lastLapTime2 = DateTime.Now;
-                        }
-                        else
-                        {
-                            LapCounter2++;
-                            LastLapTimeString2 = DateTime.Now.Subtract(_lastLapTime2.Value).ToString("mm\\:ss\\.ff");
-                            _lastLapTime2 = DateTime.Now;
-                        }
+                        _driverTwo.Update();
                     }
                     break;
             }
+        }
+
+        public void Dispose()
+        {
+            CloseComPort();
         }
     }
 }

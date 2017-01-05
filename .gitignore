@@ -1,5 +1,8 @@
 # Windows image file caches
 Thumbs.db
+bin/
+obj/
+
 ehthumbs.db
 
 # Folder config file
@@ -45,3 +48,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.suo

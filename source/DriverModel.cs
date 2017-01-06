@@ -113,8 +113,13 @@ namespace Carrera
             else
             {
                 Lap++;
-                //LastLapTimeString2 = DateTime.Now.Subtract(_lastLapTime2.Value).ToString("mm\\:ss\\.ff");
                 LastLap = DateTime.Now.Subtract(_timeStamp.Value);
+
+                if (LastLap < FastestLap || FastestLap == new TimeSpan(0))
+                    FastestLap = LastLap;
+
+                Laps.Add(LastLap);
+
                 _timeStamp = DateTime.Now;
             }
         }

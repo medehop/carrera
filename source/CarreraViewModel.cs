@@ -32,24 +32,38 @@ namespace Carrera
 
         private void InitComPort(int port)
         {
-            _serialPort = new SerialPort(string.Format("COM{0}", port));
+            try
+            {
+                _serialPort = new SerialPort(string.Format("COM{0}", port));
 
-            _serialPort.BaudRate = 9600;
-            _serialPort.Parity = Parity.None;
-            _serialPort.StopBits = StopBits.One;
-            _serialPort.DataBits = 8;
-            _serialPort.Handshake = Handshake.None;
-            _serialPort.RtsEnable = false;
+                _serialPort.BaudRate = 9600;
+                _serialPort.Parity = Parity.None;
+                _serialPort.StopBits = StopBits.One;
+                _serialPort.DataBits = 8;
+                _serialPort.Handshake = Handshake.None;
+                _serialPort.RtsEnable = false;
 
-            _serialPort.PinChanged += new SerialPinChangedEventHandler(PinChangedReveiveHandler);
+                _serialPort.PinChanged += new SerialPinChangedEventHandler(PinChangedReveiveHandler);
 
-            _serialPort.Open();
+                _serialPort.Open();
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+
         }
 
         private void CloseComPort()
         {
             if (_serialPort != null)
                 _serialPort.Close();
+        }
+
+        public void Start()
+        {
+            _driverOne.Update();
         }
 
         //public int LapCounter1

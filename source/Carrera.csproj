@@ -71,7 +71,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="TimeStampToStringConverter.cs" />
     <Page Include="CarerraView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

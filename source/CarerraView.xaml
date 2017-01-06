@@ -8,11 +8,6 @@
         d:DataContext="{d:DesignInstance Type=local:CarreraViewModel, IsDesignTimeCreatable=True}"
         xmlns:cal="http://www.caliburnproject.org"
         Title="Carrera" Height="500" Width="800">
-
-    <Window.Resources>
-        <local:TimeStampToStringConverter x:Key="TimeStampToStringConverter" />
-    </Window.Resources>
-
     <Grid Name="MainGrid" Margin="10,10,10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -26,42 +21,27 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBox Name="NamePlayer1" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Path=DriverOne.Name, Mode=TwoWay}" FontSize="26.667"/>
-        <Label Content="Lap:" Grid.Column="0" Grid.Row="1" FontSize="16" VerticalAlignment="Center" />
+        <Label Content="Lap:" Grid.Column="0" Grid.Row="1" FontSize="16" />
         <Label Content="{Binding Path=DriverOne.Lap, Mode=OneWay}" Grid.Column="1" Grid.Row="1" FontSize="26.667" />
-        <Label Content="Last Lap:" Grid.Column="0" Grid.Row="2" FontSize="16" VerticalAlignment="Center" />
-        <Label Content="{Binding Path=DriverOne.LastLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="1" Grid.Row="2" FontSize="26.667" />
-        <Label Content="Fastest Lap:" Grid.Column="0" Grid.Row="3" FontSize="16" VerticalAlignment="Center" />
-        <Label Content="{Binding Path=DriverOne.FastestLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="1" Grid.Row="3" FontSize="26.667" />
-        <ListBox ItemsSource="{Binding Path=DriverOne.Laps}" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Width="Auto" Height="Auto" 
-                 ScrollViewer.VerticalScrollBarVisibility="Visible">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" FontSize="26.667"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Label Content="Last Lap:" Grid.Column="0" Grid.Row="2" FontSize="16" />
+        <Label Content="1:00:234" Grid.Column="1" Grid.Row="2" FontSize="26.667" />
+        <Label Content="Fastest Lap:" Grid.Column="0" Grid.Row="3" FontSize="16" />
+        <Label Content="1:00:234" Grid.Column="1" Grid.Row="3" FontSize="26.667" />
+        <DataGrid Name="TimePlayer1" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Width="Auto" Height="Auto" />
 
         <Button Grid.Column="2" Grid.Row="1" Content="Start" cal:Message.Attach="Start" MaxHeight="25"  />
         <Button Grid.Column="2" Grid.Row="2" Content="Stop" cal:Message.Attach="Stop" MaxHeight="25" />
 
         <TextBox Name="NamePlayer2" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding Path=DriverTwo.Name, Mode=TwoWay}" FontSize="26.667" />
-        <Label Content="Lap:" Grid.Column="3" Grid.Row="1" FontSize="16" VerticalAlignment="Center" />
+        <Label Content="Lap:" Grid.Column="3" Grid.Row="1" FontSize="16" />
         <Label Content="{Binding Path=DriverTwo.Lap, Mode=OneWay}" Grid.Column="4" Grid.Row="1" FontSize="26.667" />
-        <Label Content="Last Lap:" Grid.Column="3" Grid.Row="2" FontSize="16" VerticalAlignment="Center" />
-        <Label Content="{Binding Path=DriverTwo.LastLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="4" Grid.Row="2" FontSize="26.667" />
-        <Label Content="Fastest Lap:" Grid.Column="3" Grid.Row="3" FontSize="16" VerticalAlignment="Center" />
-        <Label Content="{Binding Path=DriverTwo.FastestLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="4" Grid.Row="3" FontSize="26.667" />
-        <DataGrid Name="TimePlayer2" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="2"  Width="Auto" Height="Auto" />
-        <ListBox ItemsSource="{Binding Path=DriverTwo.Laps}" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="2" Width="Auto" Height="Auto" 
-                 ScrollViewer.VerticalScrollBarVisibility="Visible">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" FontSize="26.667"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>        
+        <Label Content="Last Lap:" Grid.Column="3" Grid.Row="2" FontSize="16" />
+        <Label Content="1:00:234" Grid.Column="4" Grid.Row="2" FontSize="26.667" />
+        <Label Content="Fastest Lap:" Grid.Column="3" Grid.Row="3" FontSize="16" />
+        <Label Content="1:00:234" Grid.Column="4" Grid.Row="3" FontSize="26.667" />
+        <DataGrid Name="TimePlayer2" Grid.Column="3" Grid.Row="4" Grid.ColumnSpan="2"  Width="Auto" Height="Auto" />        
     </Grid>
 </Window>

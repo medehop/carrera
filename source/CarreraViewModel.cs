@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using System;
+using System.Collections.ObjectModel;
+using System.Windows.Media;
 using System.IO.Ports;
 
 namespace Carrera
@@ -7,27 +9,26 @@ namespace Carrera
     class CarreraViewModel : PropertyChangedBase, IDisposable
     {
         private SerialPort _serialPort;
+        private DateTime _timeStamp1;
+        private DateTime _timeStamp2;
+        private Led _led;
 
-        private DriverModel _driverOne = new DriverModel("Lane left");
-        private DriverModel _driverTwo = new DriverModel("Lane right");
-
-
-        //int _lapCounter1 = 0;
-        //int _lapCounter2 = 0;
-        DateTime _timeStamp1;
-        DateTime _timeStamp2;
-
-        //DateTime? _lastLapTime1;
-        //DateTime? _lastLapTime2;
-
-        //string _lastLapTimeString1;
-        //string _lastLapTimeString2;
-        public DriverModel DriverOne { get { return _driverOne; } }
-        public DriverModel DriverTwo { get { return _driverTwo; } }
+        public DriverModel DriverOne { get; } = new DriverModel("BMW");
+        public DriverModel DriverTwo { get; } = new DriverModel("Mercedes");
 
         public CarreraViewModel()
         {
             InitComPort(4);
+            _led = new Led();
+            
+        }
+
+        public ObservableCollection<Color> Led => _led.Signals;
+
+        public void Start()
+        {
+            DriverOne.Update();
+            _led.Start();
         }
 
         private void InitComPort(int port)
@@ -61,62 +62,6 @@ namespace Carrera
                 _serialPort.Close();
         }
 
-        public void Start()
-        {
-            _driverOne.Update();
-        }
-
-        //public int LapCounter1
-        //{   get
-        //    {
-        //        return _lapCounter1;
-        //    }
-        //    private set
-        //    {
-        //        _lapCounter1 = value;
-        //        NotifyOfPropertyChange(() => LapCounter1);
-        //    }
-        //}
-
-        //public int LapCounter2
-        //{
-        //    get
-        //    {
-        //        return _lapCounter2;
-        //    }
-        //    private set
-        //    {
-        //        _lapCounter2 = value;
-        //        NotifyOfPropertyChange(() => LapCounter2);
-        //    }
-        //}
-
-        //public string LastLapTimeString1
-        //{
-        //    get
-        //    {
-        //        return _lastLapTimeString1;
-        //    }
-        //    private set
-        //    {
-        //        _lastLapTimeString1 = value;
-        //        NotifyOfPropertyChange(() => LastLapTimeString1);
-        //    }
-        //}
-
-        //public string LastLapTimeString2
-        //{
-        //    get
-        //    {
-        //        return _lastLapTimeString2;
-        //    }
-        //    private set
-        //    {
-        //        _lastLapTimeString2 = value;
-        //        NotifyOfPropertyChange(() => LastLapTimeString2);
-        //    }
-        //}
-
         private void PinChangedReveiveHandler(
                     object sender,
                     SerialPinChangedEventArgs e)
@@ -127,14 +72,14 @@ namespace Carrera
                     if (_timeStamp1.AddSeconds(1) < DateTime.Now)
                     {
                         _timeStamp1 = DateTime.Now;
-                        _driverOne.Update();
+                        DriverOne.Update();
                     }
                     break;
                 case SerialPinChange.DsrChanged:
                     if (_timeStamp2.AddSeconds(1) < DateTime.Now)
                     {
                         _timeStamp2 = DateTime.Now;
-                        _driverTwo.Update();
+                        DriverTwo.Update();
                     }
                     break;
             }

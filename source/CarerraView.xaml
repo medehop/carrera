@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:CarreraViewModel, IsDesignTimeCreatable=True}"
         xmlns:cal="http://www.caliburnproject.org"
-        Title="Carrera" Height="500" Width="800">
+        Title="Carrera" Height="706" Width="800">
 
     <Window.Resources>
         <local:TimeStampToStringConverter x:Key="TimeStampToStringConverter" />
@@ -33,11 +33,29 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal" Margin="0,5,0,5" HorizontalAlignment="Center">
-            <Ellipse Width="40" Height="40" Margin="0,0,20,0" Stroke="Black" Fill="{Binding Path=Led[0], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
-            <Ellipse Width="40" Height="40" Margin="0,0,20,0" Stroke="Black" Fill="{Binding Path=Led[1], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
-            <Ellipse Width="40" Height="40" Margin="0,0,20,0" Stroke="Black" Fill="{Binding Path=Led[2], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
-            <Ellipse Width="40" Height="40" Margin="0,0,20,0" Stroke="Black" Fill="{Binding Path=Led[3], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
-            <Ellipse Width="40" Height="40" Margin="0,0,20,0" Stroke="Black" Fill="{Binding Path=Led[4], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+            <Grid Background="WhiteSmoke">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Ellipse Grid.Column="0" Grid.Row="0" Width="20" Height="20" Margin="5,5,5,2" Stroke="Black" Fill="{Binding Path=Led[0], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="0" Grid.Row="1" Width="20" Height="20" Margin="5,2,5,5" Stroke="Black" Fill="{Binding Path=Led[0], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="1" Grid.Row="0" Width="20" Height="20" Margin="5,5,5,2" Stroke="Black" Fill="{Binding Path=Led[1], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="1" Grid.Row="1" Width="20" Height="20" Margin="5,2,5,5" Stroke="Black" Fill="{Binding Path=Led[1], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="2" Grid.Row="0" Width="20" Height="20" Margin="5,5,5,2" Stroke="Black" Fill="{Binding Path=Led[2], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="2" Grid.Row="1" Width="20" Height="20" Margin="5,2,5,5" Stroke="Black" Fill="{Binding Path=Led[2], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="3" Grid.Row="0" Width="20" Height="20" Margin="5,5,5,2" Stroke="Black" Fill="{Binding Path=Led[3], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="3" Grid.Row="1" Width="20" Height="20" Margin="5,2,5,5" Stroke="Black" Fill="{Binding Path=Led[3], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="4" Grid.Row="0" Width="20" Height="20" Margin="5,5,5,2" Stroke="Black" Fill="{Binding Path=Led[4], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+                <Ellipse Grid.Column="4" Grid.Row="1" Width="20" Height="20" Margin="5,2,5,5" Stroke="Black" Fill="{Binding Path=Led[4], Converter={StaticResource ColorToSolidColorBrushConverter}, Mode=OneWay}"/>
+            </Grid>
         </StackPanel>
         
         <TextBox Name="NamePlayer1" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Path=DriverOne.Name, Mode=TwoWay}" FontSize="26.667"/>
@@ -47,14 +65,18 @@
         <Label Content="{Binding Path=DriverOne.LastLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="1" Grid.Row="3" FontSize="42" />
         <Label Content="Fastest Lap:" Grid.Column="0" Grid.Row="4" FontSize="24" VerticalAlignment="Center" />
         <Label Content="{Binding Path=DriverOne.FastestLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="1" Grid.Row="4" FontSize="42" />
-        <ListBox ItemsSource="{Binding Path=DriverOne.Laps}" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Width="Auto" Height="Auto" 
-                 ScrollViewer.VerticalScrollBarVisibility="Visible">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" FontSize="32"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <DataGrid Name="TimePlayer1" CanUserAddRows="True" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" ItemsSource="{Binding Path=DriverOne.Laps, Mode=OneWay}" >
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock FontSize="32" Text="{Binding Converter={StaticResource TimeStampToStringConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTextColumn Header="Laps" IsReadOnly="True" Binding="{Binding Path=DriverOne.Laps, Converter={StaticResource TimeStampToStringConverter}}" />-->
+            </DataGrid.Columns>
+        </DataGrid>
 
         <TextBox Name="NamePlayer2" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Path=DriverTwo.Name, Mode=TwoWay}" FontSize="26.667" />
         <Label Content="Lap:" Grid.Column="2" Grid.Row="2" FontSize="24" VerticalAlignment="Center" />
@@ -63,20 +85,23 @@
         <Label Content="{Binding Path=DriverTwo.LastLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="3" Grid.Row="3" FontSize="42" />
         <Label Content="Fastest Lap:" Grid.Column="2" Grid.Row="4" FontSize="24" VerticalAlignment="Center" />
         <Label Content="{Binding Path=DriverTwo.FastestLap, Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" Grid.Column="3" Grid.Row="4" FontSize="42" />
-        <DataGrid Name="TimePlayer2" Grid.Column="2" Grid.Row="5" Grid.ColumnSpan="2"  Width="Auto" Height="Auto" />
-        <ListBox ItemsSource="{Binding Path=DriverTwo.Laps}" Grid.Column="2" Grid.Row="5" Grid.ColumnSpan="2" Width="Auto" Height="Auto" 
-                 ScrollViewer.VerticalScrollBarVisibility="Visible">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Mode=OneWay, Converter={StaticResource TimeStampToStringConverter}}" FontSize="26.667"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <DataGrid Name="TimePlayer2" CanUserAddRows="True" AutoGenerateColumns="False" Grid.Column="2" Grid.Row="5" Grid.ColumnSpan="2" ItemsSource="{Binding Path=DriverTwo.Laps, Mode=OneWay}" >
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock FontSize="32" Text="{Binding Converter={StaticResource TimeStampToStringConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--<DataGridTextColumn Header="Laps" IsReadOnly="True" Binding="{Binding Path=DriverOne.Laps, Converter={StaticResource TimeStampToStringConverter}}" />-->
+            </DataGrid.Columns>
+        </DataGrid>
 
         <Separator Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="4" Margin="0,20,0,10"/>
         <StackPanel Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button MinWidth="120" Margin="0,5,5,5" Content="Start" cal:Message.Attach="Start" MaxHeight="25" />
-            <Button MinWidth="120" Margin="5,5,5,5" Content="Stop" cal:Message.Attach="Stop" MaxHeight="25" />
+            <Button MinWidth="120" Margin="0,5,5,5" Content="Start" cal:Message.Attach="Start" FontSize="16" />
+            <Button MinWidth="120" Margin="5,5,0,5" Content="Stop" cal:Message.Attach="Stop" FontSize="16" />
         </StackPanel>
     </Grid>
 </Window>

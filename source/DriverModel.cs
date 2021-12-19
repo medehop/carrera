@@ -118,7 +118,8 @@ namespace Carrera
                 if (LastLap < FastestLap || FastestLap == new TimeSpan(0))
                     FastestLap = LastLap;
 
-                Laps.Add(LastLap);
+                //Laps.Add(LastLap);
+                Laps.Insert(0, LastLap);
 
                 _timeStamp = DateTime.Now;
             }

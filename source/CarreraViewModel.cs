@@ -32,8 +32,11 @@ namespace Carrera
             _led.Start();
         }
 
-        public void Stop()
+        public void Reset()
         {
+            DriverOne.Clear();
+            DriverTwo.Clear();
+            _led.Stop();
         }
 
         private void InitComPort(int port)

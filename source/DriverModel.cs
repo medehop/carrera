@@ -72,6 +72,7 @@ namespace Carrera
                 NotifyOfPropertyChange(() => FastestLap);
             }
         }
+
         /// <summary>
         /// Represents time of last lap.
         /// </summary>
@@ -85,6 +86,17 @@ namespace Carrera
             {
                 _lastLap = value;
                 NotifyOfPropertyChange(() => LastLap);
+            }
+        }
+
+        /// <summary>
+        /// Represents a list of lap times.
+        /// </summary>
+        public virtual ObservableCollection<TimeSpan> Laps
+        {
+            get
+            {
+                return _laps;
             }
         }
 
@@ -104,6 +116,9 @@ namespace Carrera
         //    }
         //}
 
+        /// <summary>
+        /// Updates lap times.
+        /// </summary>
         public virtual void Update()
         {
             if (!_timeStamp.HasValue)
@@ -126,14 +141,13 @@ namespace Carrera
         }
 
         /// <summary>
-        /// Represents a list of lap times.
+        /// Clears lap times
         /// </summary>
-        public virtual ObservableCollection<TimeSpan> Laps
+        public virtual void Clear()
         {
-            get
-            {
-                return _laps;
-            }
+            Laps.Clear();
+            LastLap = new TimeSpan(0);
+            FastestLap = new TimeSpan(0);
         }
     }
 }
